@@ -7,3 +7,7 @@ output "alb_dns_name" {
     value = "example-alb-dns"
     description = "The domain name of the load balancer"
 }
+
+output "instance_ids" {
+    value = aws_instance.web[*].id
+}
