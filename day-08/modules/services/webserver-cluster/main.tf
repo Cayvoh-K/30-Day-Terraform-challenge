@@ -28,14 +28,12 @@ resource "aws_launch_template" "example" {
   image_id      = data.aws_ami.amazon_linux.id
   instance_type = var.instance_type
 
-  user_data = base64encode(<<-EOF
-              #!/bin/bash
-              echo "Hello, World" > index.html
-              nohup busybox httpd -f -p ${var.server_port} &
-              EOF
-  )
+   user_data = base64encode(
+  templatefile("${path.module}/user-data.sh", {
+    server_port = var.server_port
+  })
+)
 }
-
 # ✅ AUTO SCALING GROUP
 resource "aws_autoscaling_group" "example" {
   desired_capacity = var.min_size
